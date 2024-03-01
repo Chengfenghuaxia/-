@@ -10,6 +10,8 @@ redis = new Redis();
 const bot = new TelegramBot('6445269699:AAGHNcyWNl-wfDM0IdmWbaX7yVmiil4BWGs', { polling: true });
 let MyAdvertise = utils.getMyAdvertise(redis) //我的广告  只要服务已开启输入ID就能转发广告
 
+
+
 //监听用户消息回调
 bot.on('message', async (msg) => {
     messageModule(bot, msg, redis, utils, State, SendReg)

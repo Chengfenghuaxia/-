@@ -1,27 +1,52 @@
-const TelegramBot = require('node-telegram-bot-api');
+const Redis = require('ioredis');
+const redis = new Redis();
 
-const token = '6445269699:AAGHNcyWNl-wfDM0IdmWbaX7yVmiil4BWGs';
-const bot = new TelegramBot(token, { polling: true });
+// 存储 Map
+async function storeMap(key, map) {
+    // 使用 HMSET 命令将 Map 存储为 Hash
+    await redis.hmset(key, map);
+}
 
+// 获取 Map
+async function getMap(key) {
+    // 使用 HGETALL 命令获取 Hash 中的所有字段和值
+    const map = await redis.hgetall(key);
+    return map;
+}
 
+// 示例数据
+const exampleMap = {
+    field1: 'value1',
+    field2: 'value2',
+    field3: 'value3'
+};
+const exampleMap1 = {
+    field1: 'value1',
+    field2: 'value2',
+    field3: 'value32020'
+};
+// 存储示例数据
+storeMap('exampleKey', exampleMap)
+    .then(() => {
+        console.log('Map stored successfully.');
+    })
+    .catch(err => {
+        console.error('Error storing map:', err);
+    });
 
-// 保存机器人最后一条发送的消息的消息 ID
-let lastMessageId = null;
+storeMap('exampleKey1', exampleMap1)
+    .then(() => {
+        console.log('Map stored successfully.');
+    })
+    .catch(err => {
+        console.error('Error storing map:', err);
+    });
 
-// 监听用户发送的消息
-bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-    const messageId = msg.message_id;
-
-    // 检查是否是回复消息，并且是否是回复机器人最后一条消息
-    if (msg.reply_to_message && msg.reply_to_message.message_id === lastMessageId) {
-        // 执行相应操作，例如记录用户的回复
-        console.log(`用户回复了机器人的消息：${msg.text}`);
-    } else {
-        // 不是回复消息，记录机器人发送的消息 ID，以便后续引用
-        lastMessageId = messageId;
-        // 例如，向用户发送一条消息，以便用户可以回复
-        bot.sendMessage(chatId, '请回复此消息以执行特定操作。');
-    }
-});
-
+// 获取示例数据
+getMap('exampleKey1')
+    .then(map => {
+        console.log('Map retrieved:', map);
+    })
+    .catch(err => {
+        console.error('Error retrieving map:', err);
+    });

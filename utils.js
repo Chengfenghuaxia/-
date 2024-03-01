@@ -34,6 +34,7 @@ async function getMyAdvertise(redis) {
     })
     let res = await Promise.all(allGG)
     const filteredStrings = filterJSONObject(res);
+    console.log(filteredStrings);
     return filteredStrings.map((item, index) => {
         return JSON.parse(item)
     })
