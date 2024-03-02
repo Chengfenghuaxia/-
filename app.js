@@ -23,6 +23,6 @@ bot.on('inline_query', async (msg) => {
 });
 
 bot.on('callback_query', async (callbackQuery) => {
-    callback_query(bot, callbackQuery, utils)
+    callback_query(bot, callbackQuery, State)
 });
 

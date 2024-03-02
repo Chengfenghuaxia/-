@@ -27,12 +27,38 @@ function filterJSONObject(strings) {
         }
     });
 }
+//获取我的广告
 async function getMyAdvertise(redis, chatId) {
     let alldata = await redis.hgetall(chatId)
     return alldata
 }
+//获取公共库广告
+async function getAllvertise(redis,State){
+    let res =  await redis.hgetall(State.DBname)
+    return res
+}
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
+}
+async function setAsdtitle(bot,State,messageText,redis,chatId){
+    State.messageIdToReply = messageText
+    State.waitingForReply = false
+    let text = await redis.get("Text")
+    let msgs = {
+        file_id: State.photoID,
+        id: State.VerificationCode,
+        text: text ? text.substr(1) : "",
+        button: State.replyButton,
+        title: State.messageIdToReply
+    }
+    redis.hset(chatId, State.VerificationCode, JSON.stringify(msgs), function (err, reply) {
+        if (err != null) {
+            console.log(err);
+            return
+        }
+        console.log(msgs, "收藏的广告");
+        bot.sendMessage(chatId, "收藏成功")
+    });
 }
 module.exports = {
     isUrl,
@@ -40,5 +66,7 @@ module.exports = {
     generateRandomString,
     filterJSONObject,
     getMyAdvertise,
-    isEmpty
+    isEmpty,
+    getAllvertise,
+    setAsdtitle
 }

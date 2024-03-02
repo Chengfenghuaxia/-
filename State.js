@@ -9,5 +9,6 @@ module.exports = {
     type: "", //文本类型
     waitingForReply: false,//是否等待回复
     messageIdToReply: null, //回复标题
-    button : [['我的广告', '创建广告']] //初试内联按钮
+    button : [['我的广告', '创建广告']], //初试内联按钮
+    DBname:"publicDB" //公共库
 }
