@@ -1,5 +1,6 @@
 
 module.exports = {
+    chatId:"",//用户ID  用于区分回话用户
     text: "", //发送文本
     photoID: "", //fileID
     iswenben: false, //发送类型是否文本

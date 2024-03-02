@@ -8,7 +8,7 @@ const callback_query = require('./callback_query')
 const SendReg = require('./SendRegularly')
 redis = new Redis();
 const bot = new TelegramBot('6445269699:AAGHNcyWNl-wfDM0IdmWbaX7yVmiil4BWGs', { polling: true });
-let MyAdvertise = utils.getMyAdvertise(redis) //我的广告  只要服务已开启输入ID就能转发广告
+let MyAdvertise = utils.getMyAdvertise(redis,State.chatId) //我的广告  只要服务已开启输入ID就能转发广告
 
 
 

@@ -1,9 +1,12 @@
 module.exports = async function (bot, msg, redis, utils, State, MyAdvertise) {
-
+    console.log(msg);
     const queryId = msg.id;
     const queryText = msg.query;
+    const chatId = msg.from.id;
     let results = []
     let MyAdvertises = await MyAdvertise
+
+    //首次变量保存
     if (utils.VerificationCode == queryText) {
         let iswb = queryText.slice(0, 2); //是否文本
         if (iswb == "WB") {
@@ -38,8 +41,9 @@ module.exports = async function (bot, msg, redis, utils, State, MyAdvertise) {
             ];
         }
 
-    } else {
-        let res = JSON.parse(await redis.get(queryText))
+    }  {
+        //永久储存
+        let res = JSON.parse(await redis.hget(chatId, queryText))
         let iswb = res.id.slice(0, 2); //是否文本
         if (iswb == "WB") {
             results = [

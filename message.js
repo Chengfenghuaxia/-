@@ -3,7 +3,7 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
     const button = [['我的广告', '创建广告']]; //初试内联按钮
     text = ""
     const chatId = msg.chat.id;
-
+    State.chatId = chatId
     //开启定时发送任务
     SendReg.SendRegularly(bot, msg)
 
@@ -48,20 +48,13 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
             button: utils.replyButton,
             title: utils.messageIdToReply
         }
-        redis.set(utils.VerificationCode, JSON.stringify(msgs), function (err, reply) {
+        redis.hset(chatId, utils.VerificationCode, JSON.stringify(msgs), function (err, reply) {
             if (err != null) {
                 console.log(err);
                 return
             }
             bot.sendMessage(chatId, "收藏成功")
         });
-        //  redis.hset(chatId,utils.VerificationCode, JSON.stringify(msgs), function (err, reply) {
-        //     if (err != null) {
-        //         console.log(err);
-        //         return
-        //     }
-        //     bot.sendMessage(chatId, "收藏成功")
-        // });
     }
 
     bot.getUpdates().then(res => {
@@ -136,23 +129,25 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
                     });
                     break
                 case "我的广告":
-                    MyAdvertise = await utils.getMyAdvertise(redis) //获取数据库广告
-                    if (MyAdvertise.length == 0) {
+                    MyAdvertise = await utils.getMyAdvertise(redis, chatId) //获取数据库广告
+                    if (utils.isEmpty(MyAdvertise)) {
                         return bot.sendMessage(chatId, "你还没有发布广告")
                     }
                     let sendmsg = ""
-                    console.log(MyAdvertise, "查看广告是否完整");
-                    MyAdvertise.map((item, index) => {
-                        sendmsg += `\n${index + 1}.${item.title}\n
-                       \n@HeartTetrisbot ${item.id}\n
-                       \n🗑/delete_${item.id.substring(item.id.length - 6)}`
-                    })
+                    let index = 1
+                    for (key in MyAdvertise) {
+                        console.log(key, JSON.parse(MyAdvertise[key]), "打印单条广告");
+                        let data = JSON.parse(MyAdvertise[key])
+                        sendmsg += `\n${index}.${data.title}\n
+                       \n@HeartTetrisbot ${data.id}\n
+                       \n🗑/delete_${data.id.substring(data.id.length - 6)}`
+                        index++
+                    }
                     bot.sendMessage(chatId, sendmsg)
                     break
 
                 case "/reset":
-                    //删除所有键
-                    redis.flushall((err, result) => {
+                    redis.del(chatId, (err, result) => { //删除广告
                         if (err) {
                             console.error('Error flushing all databases:', err);
                         } else {
@@ -162,6 +157,16 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
                     });
                     break
 
+                case "/admin_reset": //管理员删除所有用户广告数据
+                    redis.flushall((err, result) => {
+                        if (err) {
+                            console.error('Error flushing all databases:', err);
+                        } else {
+                            console.log('Flushed all databases:', result);
+                            bot.sendMessage(chatId, "我的广告已删除")
+                        }
+                    });
+                    break
                 case "返回":
                     bot.sendMessage(chatId, "请重新开始", {
                         reply_markup: {
