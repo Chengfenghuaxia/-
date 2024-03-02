@@ -1,4 +1,4 @@
-module.exports = async function (bot, msg, redis, utils,State,MyAdvertise) {
+module.exports = async function (bot, msg, redis, utils, State, MyAdvertise) {
 
     const queryId = msg.id;
     const queryText = msg.query;
@@ -39,43 +39,37 @@ module.exports = async function (bot, msg, redis, utils,State,MyAdvertise) {
         }
 
     } else {
-        MyAdvertises.map(async item => {
-            if (queryText == item.id) {
-                console.log(item, "查看单个ID广告");
-                let iswb = item.id.slice(0, 2); //是否文本
-                if (iswb == "WB") {
-                    results = [
-                        {
-                            type: 'article',
-                            id: '1',
-                            title: '点击发送',
-                            input_message_content: {
-                                message_text: item.text
-                            },
-                            reply_markup: {
-                                inline_keyboard: item.button
-                            }
-                        }
-                    ]
-                } else {
-                    results = [
-                        {
-                            type: 'photo',
-                            id: '1',
-                            photo_file_id: item.file_id,
-                            title: 'Photo with Button',
-                            reply_markup: {
-                                inline_keyboard: item.button
-                            }
-                        },
-
-                        // 添加更多内联查询结果...
-                    ];
+        let res = JSON.parse(await redis.get(queryText))
+        let iswb = res.id.slice(0, 2); //是否文本
+        if (iswb == "WB") {
+            results = [
+                {
+                    type: 'article',
+                    id: '1',
+                    title: '点击发送',
+                    input_message_content: {
+                        message_text: res.text
+                    },
+                    reply_markup: {
+                        inline_keyboard: res.button
+                    }
                 }
-            } else {
-                console.log("一个都没对上");
-            }
-        })
+            ]
+        } else {
+            results = [
+                {
+                    type: 'photo',
+                    id: '1',
+                    photo_file_id: res.file_id,
+                    title: 'Photo with Button',
+                    reply_markup: {
+                        inline_keyboard: res.button
+                    }
+                },
+
+                // 添加更多内联查询结果...
+            ];
+        }
     }
 
     // 回复内联查询

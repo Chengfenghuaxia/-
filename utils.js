@@ -28,17 +28,33 @@ function filterJSONObject(strings) {
     });
 }
 async function getMyAdvertise(redis) {
+  
     let alldata = await redis.keys('*')
     let allGG = alldata.map(async code => {
         return await redis.get(code)
     })
     let res = await Promise.all(allGG)
     const filteredStrings = filterJSONObject(res);
-    console.log(filteredStrings);
+    console.log(filteredStrings,"首次进入");
     return filteredStrings.map((item, index) => {
         return JSON.parse(item)
     })
 }
+// async function getMyAdvertise(redis) {
+//       let alldata = await redis.keys('*')
+//       redis.hgetall('afeng', (err, res) => {
+//         console.log(err, res);
+//     })
+//     let allGG = alldata.map(async code => {
+//         return await redis.get(code)
+//     })
+//     let res = await Promise.all(allGG)
+//     const filteredStrings = filterJSONObject(res);
+//     console.log(filteredStrings,"首次进入");
+//     return filteredStrings.map((item, index) => {
+//         return JSON.parse(item)
+//     })
+// }
 module.exports = {
     isUrl,
     generateForwardMessageId,

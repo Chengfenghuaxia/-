@@ -55,6 +55,13 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
             }
             bot.sendMessage(chatId, "收藏成功")
         });
+        //  redis.hset(chatId,utils.VerificationCode, JSON.stringify(msgs), function (err, reply) {
+        //     if (err != null) {
+        //         console.log(err);
+        //         return
+        //     }
+        //     bot.sendMessage(chatId, "收藏成功")
+        // });
     }
 
     bot.getUpdates().then(res => {
