@@ -6,11 +6,11 @@ module.exports = function (bot, msg, redis, utils, State) {
             let button = [
                 { text: cq[1], url: cq[2] },
             ]
-            utils.replyButton = [button]
+            State.replyButton = [button]
             redis.get("Text").then(res => {
-                if (utils.iswenben) {   //如果是文本类型广告
-                    utils.type = "WB"
-                    utils.iswenben = false
+                if (State.iswenben) {   //如果是文本类型广告
+                    State.type = "WB"
+                    State.iswenben = false
                     bot.sendMessage(chatId, res.substr(1), {
                         reply_markup: {
                             inline_keyboard: [
@@ -29,7 +29,7 @@ module.exports = function (bot, msg, redis, utils, State) {
                         })
                     })
                 } else {  //图片类型
-                    utils.type = "TP"
+                    State.type = "TP"
                     let ok = utils.isUrl(cq[2])
                     if (!ok) {
                         bot.sendMessage(chatId, "请输入正确的链接")
@@ -65,12 +65,12 @@ module.exports = function (bot, msg, redis, utils, State) {
                 return [{ text: cq[1], url: cq[2] }]
             }
         })
-        utils.replyButton = button
+        State.replyButton = button
         if (true) {
             redis.get("Text").then(res => {
-                if (utils.iswenben) {
-                    utils.type = "WB"
-                    utils.iswenben = false
+                if (State.iswenben) {
+                    State.type = "WB"
+                    State.iswenben = false
                     bot.sendMessage(chatId, res.substr(1), {
                         reply_markup: {
                             inline_keyboard: button,
@@ -88,7 +88,7 @@ module.exports = function (bot, msg, redis, utils, State) {
                     });
                 } else {
                     console.log("是否走了这里");
-                    utils.type = "TP"
+                    State.type = "TP"
                     let ok = utils.isUrl(button[0][0].url)
                     if (!ok) {
                         bot.sendMessage(chatId, "请输入正确的链接")
