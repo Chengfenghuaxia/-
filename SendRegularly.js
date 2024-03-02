@@ -1,5 +1,6 @@
 const schedule = require('node-schedule');
 
+//定时发送消息   群内用
 function SendRegularly(bot, msg) {
     const chatId = msg.chat.id;
     let DQnow = getNowData()

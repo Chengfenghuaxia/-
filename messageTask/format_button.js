@@ -1,3 +1,4 @@
+// 不同情况下按钮处理
 module.exports = function (bot, msg, redis, utils, State) {
     const chatId = msg.chat.id;
     if (msg.text.split('\n').length == 1) {   //如果是单个按钮

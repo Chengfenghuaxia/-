@@ -2,11 +2,11 @@
 function isUrl(url) {
     return /^https?:\/\/([a-zA-Z0-9]+\.)+[a-zA-Z0-9]+/.test(url)
 }
-
+// 生成发送命令
 function generateForwardMessageId(username, messageId) {
     return `@${username} ${messageId}`;
 }
-
+//生成12消息位随机代码
 function generateRandomString(length, type) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -37,9 +37,11 @@ async function getAllvertise(redis,State){
     let res =  await redis.hgetall(State.DBname)
     return res
 }
+// 非空校验
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
+// 添加广告名
 async function setAsdtitle(bot,State,messageText,redis,chatId){
     State.messageIdToReply = messageText
     State.waitingForReply = false

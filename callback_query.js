@@ -1,3 +1,4 @@
+//点击内联按钮的回调
 module.exports = function (bot, callbackQuery, State){
     const chatId = callbackQuery.message.chat.id;
     const data = callbackQuery.data;

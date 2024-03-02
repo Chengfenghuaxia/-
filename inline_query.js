@@ -40,7 +40,7 @@ module.exports = async function (bot, msg, redis, utils, State, MyAdvertise) {
         }
 
     }
-    else if (2 > 1) {
+    else if (true) {
         // 暂存区  广告24小时候删除
         let Allads = await utils.getAllvertise(redis, State) //获取公共库广告
         let res = JSON.parse(Allads[queryText])

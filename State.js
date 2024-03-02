@@ -1,4 +1,5 @@
 
+//  状态管理  别动
 module.exports = {
     chatId:"",//用户ID  用于区分回话用户
     text: "", //发送文本
