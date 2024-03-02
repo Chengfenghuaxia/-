@@ -1,36 +1,67 @@
 const schedule = require('node-schedule');
+const config = require('./config/index');
+const { getfileTxt } = require('./utils')
+let Intverval = null
 
 //定时发送消息   群内用
-function SendRegularly(bot, msg) {
+async function SendRegularly(bot, msg, State) {
+    console.log(config.sendtimes, '定时发送时间');
     const chatId = msg.chat.id;
     let DQnow = getNowData()
     console.log(DQnow); //查看当前时间
+    let text = await getfileTxt()
+    if (config.sendtype == 1) {
+        // 指定时间发送
+        config.sendtimes.map(item => {
+            Intverval = schedule.scheduleJob({ hour: item.hour, minute: item.minute }, function () {
+                // 发送消息
+                if (config.type == 1) {
+                    bot.sendPhoto(chatId, config.mediaUrl, {
+                        reply_markup: {
+                            inline_keyboard: config.button
+                        }
+                    })
+                } else {
 
-    // 每天下午5:00发送消息
-    schedule.scheduleJob({ hour: 22, minute: 27 }, function () {
-        // 发送消息
-        bot.sendMessage(-4126577286, "@HeartTetrisbot TP7QYVYo7CUpYb", {
-            reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                inline_keyboard: [
-                    [
-                        {
-                            text: '分享',
-                            url: 'https://t.me/HeartTetrisbot'
+                    bot.sendMessage(chatId, text, {
+                        reply_markup: {
+                            resize_keyboard: true,
+                            one_time_keyboard: true,
+                            inline_keyboard: config.button
                         }
-                    ],
-                    [
-                        {
-                            text: '收藏',
-                            callback_data: "收藏"
-                        }
-                    ],
-                ]
-            }
+                    })
+                }
+
+            });
+
         })
-    });
+    } else {
+        // 间隔N分钟发送一次
+        Intverval = schedule.scheduleJob(config.interval, function () {
+            // 发送消息
+            if (config.type == 1) {
+                bot.sendPhoto(chatId, config.mediaUrl, {
+                    reply_markup: {
+                        inline_keyboard: config.button
+                    }
+                })
+            } else {
+                bot.sendMessage(chatId, text, {
+                    reply_markup: {
+                        resize_keyboard: true,
+                        one_time_keyboard: true,
+                        inline_keyboard: config.button
+                    }
+                })
+            }
+
+        });
+    }
+    return Intverval
 }
+
+
+
 
 function getNowData() {
 
@@ -50,5 +81,9 @@ function getNowData() {
 }
 module.exports = {
     SendRegularly,
-    getNowData
+    getNowData,
+    Intverval
 }
+
+
+// -4126577286 //测试群ID

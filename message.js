@@ -1,15 +1,13 @@
 const updateBack = require('./messageTask/updates')
 const fmtButton = require('./messageTask/format_button')
+const config = require('./config/index');
 module.exports = async function (bot, msg, redis, utils, State, SendReg) {
     const button = [['我的广告', '创建广告']]; //初试内联按钮
     text = ""
     const chatId = msg.chat.id;
     State.chatId = chatId
-    //开启定时发送任务
-    SendReg.SendRegularly(bot, msg)
-
     const messageText = msg.text;
-     //启动机器人命令
+    //启动机器人命令
     if (msg.text == "/start") {
         bot.sendMessage(chatId, "你好，我是您的机器人小助手", {
             reply_markup: {
@@ -46,6 +44,13 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
     bot.getUpdates().then(res => {
         res.map(async val => {
             switch (val.message.text) {
+                case config.StartSending: //开启定时任务 发送广告
+                    State.Intverval = SendReg.SendRegularly(bot, msg, State)
+                    break
+                case config.EndSending: //结束定时任务
+                    let res = await State.Intverval
+                    res.cancel()
+                    break
                 case "创建广告":
                     updateBack.CreateAse(bot, chatId)
                     break;

@@ -1,3 +1,4 @@
+const fs = require('fs')
 //检验链接合法性
 function isUrl(url) {
     return /^https?:\/\/([a-zA-Z0-9]+\.)+[a-zA-Z0-9]+/.test(url)
@@ -33,8 +34,8 @@ async function getMyAdvertise(redis, chatId) {
     return alldata
 }
 //获取公共库广告
-async function getAllvertise(redis,State){
-    let res =  await redis.hgetall(State.DBname)
+async function getAllvertise(redis, State) {
+    let res = await redis.hgetall(State.DBname)
     return res
 }
 // 非空校验
@@ -42,7 +43,7 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 // 添加广告名
-async function setAsdtitle(bot,State,messageText,redis,chatId){
+async function setAsdtitle(bot, State, messageText, redis, chatId) {
     State.messageIdToReply = messageText
     State.waitingForReply = false
     let text = await redis.get("Text")
@@ -62,6 +63,20 @@ async function setAsdtitle(bot,State,messageText,redis,chatId){
         bot.sendMessage(chatId, "收藏成功")
     });
 }
+//读取广告信息
+function getfileTxt() {
+    return new Promise((resolve, reject) => {
+        fs.readFile("./config/msg.txt", 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', err);
+                reject(err)
+                return;
+            }
+            resolve(data)
+           
+        });
+    })
+}
 module.exports = {
     isUrl,
     generateForwardMessageId,
@@ -70,5 +85,6 @@ module.exports = {
     getMyAdvertise,
     isEmpty,
     getAllvertise,
-    setAsdtitle
+    setAsdtitle,
+    getfileTxt
 }
