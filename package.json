@@ -4,6 +4,7 @@
   "description": "飞机机器人",
   "main": "app.js",
   "dependencies": {
+    "ini-parser": "0.0.2",
     "ioredis": "^5.3.2",
     "node-schedule": "^2.1.1",
     "node-telegram-bot-api": "^0.64.0"
