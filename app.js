@@ -21,6 +21,7 @@ bot.on('message', async (msg) => {
 bot.on('inline_query', async (msg) => {
     inline_query(bot, msg, redis, utils, State, MyAdvertise)
 });
+
 // 内联按钮回调监听
 bot.on('callback_query', async (callbackQuery) => {
     callback_query(bot, callbackQuery, State)

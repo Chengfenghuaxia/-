@@ -19,16 +19,18 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
     }
 
     if (msg.photo && msg.photo[0].file_id.length > 0) {
+        console.log("发图");
         State.photoID = msg.photo[0].file_id
         text = "按以下格式发送链接：\n格式+按钮文字+合法链接\n\n例子：\n格式+客服+https://t.me/TransioBot\n\n要将多个按钮添加到一行，请从新行写入新链接。\n格式：\n[第一个文字+第一个链接]\n[第二条文字+第二条链接]"
         bot.sendMessage(chatId, text)
+    } else {
+        console.log("发文本");
+        if (msg.text.includes('：')) {
+            redis.set('Text', msg.text);
+        }
     }
 
-    if (msg.text.includes('：')) {
-        redis.set('Text', msg.text);
-    }
-
-    if (msg.text.slice(0, 2) == "格式") {
+    if (msg.text && msg.text.slice(0, 2) == "格式") {
         //单按钮&多按钮处理逻辑
         fmtButton(bot, msg, redis, utils, State)
     }
@@ -49,7 +51,7 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg) {
                     break
                 case config.EndSending: //结束定时任务
                     let res = await State.Intverval
-                    res.cancel()
+                    res ? res.cancel() : ''
                     break
                 case "创建广告":
                     updateBack.CreateAse(bot, chatId)

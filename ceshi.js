@@ -6,6 +6,15 @@ const iniParser = require('ini-parser');
 const configData = fs.readFileSync('./config/config.ini', 'utf-8');
 
 const parsedData = iniParser.parse(configData);
-// 解析 INI 格式的数据
-console.log(parsedData);
 
+
+// 处理模拟数组
+const arrayPrefix = 'fruit'; // 假设键名前缀为 'fruit'
+const fruitArray = [];
+let i = 0;
+while (parsedData[arrayPrefix + i]) {
+    fruitArray.push(parsedData[arrayPrefix + i]);
+    i++;
+}
+
+console.log(fruitArray); // 输出模拟的数组
