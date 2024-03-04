@@ -64,9 +64,14 @@ async function setAsdtitle(bot, State, messageText, redis, chatId) {
     });
 }
 //读取广告信息
-function getfileTxt() {
-    return fs.readFileSync("./config/msg.txt", 'utf8');
-}
+function getfileTxt(chatId,config) {
+    if(config.GroupList[chatId]){
+        let path = `./config/advertise/${config.GroupList[chatId]}.txt`
+        return fs.readFileSync(path, 'utf8');
+    }else{
+        return "找不到内容"
+    }
+   }
 
 function readConfig() {
     return JSON.parse(fs.readFileSync('./config/config.json', 'utf8'));

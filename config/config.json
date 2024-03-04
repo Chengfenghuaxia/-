@@ -1,26 +1,38 @@
 {
-    "startSending":"start",
-    "endSending":"endset",
+    "token": "6445269699:AAGHNcyWNl-wfDM0IdmWbaX7yVmiil4BWGs",
+    "startSending": "start",
+    "endSending": "endset",
     "sendtimes": [
         {
             "hour": 15,
             "minute": 14
-        }, {
+        },
+        {
             "hour": 21,
             "minute": 57
         }
     ],
-    "interval":"*/1 * * * * *",
-    "sendtype":1,
-    "type": 1, 
-    "mediaUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
-    "button":[
+    "interval": "*/10 * * * * *",
+    "sendtype": 2,
+    "type": 2,
+    "mediaUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
+    "button": [
         [
             {
                 "text": "分享1",
-                "url": "https://t.me/HeartTetrisbot" 
+                "url": "https://t.me/HeartTetrisbot"
             }
         ]
     ],
-    "Permiss":[7026478262,7026478261]
+    "Permiss": [
+        7026478262,
+        7026478261
+    ],
+    "GroupList": {
+        "-4126577286":"1",
+        "-4132815182":"2",
+        "-4144254793":"3"
+    }
+   
+    
 }

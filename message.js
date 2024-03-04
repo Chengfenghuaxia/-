@@ -1,21 +1,11 @@
 const updateBack = require('./messageTask/updates')
 const fmtButton = require('./messageTask/format_button')
-module.exports = async function (bot, msg, redis, utils, State, SendReg, config, congent) {
+module.exports = async function (bot, msg, redis, utils, State, SendReg, config) {
     const button = [['我的广告', '创建广告']]; //初试内联按钮
     text = ""
     const chatId = msg.chat.id;
     State.chatId = chatId
     const messageText = msg.text;
-    //启动机器人命令
-    if (msg.text == "/start") {
-        bot.sendMessage(chatId, "你好，我是您的机器人小助手", {
-            reply_markup: {
-                keyboard: button, // 自定义按钮文本
-                resize_keyboard: true, // 调整键盘大小以适应内容
-                one_time_keyboard: false // 不关闭键盘后再次打开时保持上次状态
-            }
-        })
-    }
 
     if (msg.photo && msg.photo[0].file_id.length > 0) {
         console.log("发图");
@@ -24,7 +14,7 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg, config,
         bot.sendMessage(chatId, text)
     } else {
         console.log("发文本");
-        if (msg.text.includes('：')) {
+        if (msg.text && msg.text.includes('：')) {
             redis.set('Text', msg.text);
         }
     }
@@ -41,23 +31,35 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg, config,
     if (State.waitingForReply) {
         utils.setAsdtitle(bot, State, messageText, redis, chatId)
     }
-
+    let isPermiss = config.Permiss.some(item => {
+        return item == msg.from.id  //指向用户
+    })
     bot.getUpdates().then(res => {
         res.map(async val => {
             switch (val.message.text) {
-                case config.startSending: //开启定时任务 发送广告
-                    let isPermiss = config.Permiss.some(item => {
-                        return item == chatId
+                case '/start':     //启动机器人命令
+                    bot.sendMessage(chatId, `你好，我是您的机器人小助手,您的ChatId为:${chatId}`, {
+                        reply_markup: {
+                            keyboard: button, // 自定义按钮文本
+                            resize_keyboard: true, // 调整键盘大小以适应内容
+                            one_time_keyboard: false // 不关闭键盘后再次打开时保持上次状态
+                        }
                     })
+                    break
+                case config.startSending: //开启定时任务 发送广告
                     if (isPermiss) {
-                        State.Intverval = SendReg.SendRegularly(bot, msg, config, congent)
+                        State.Intverval = SendReg.SendRegularly(bot, msg, config)
                     } else {
                         bot.sendMessage(chatId, "您没有权限开启定时任务")
                     }
                     break
                 case config.endSending: //结束定时任务
-                    let res = await State.Intverval
-                    res ? res.cancel() : ''
+                    if (isPermiss) {
+                        let res = await State.Intverval
+                        res ? res.cancel() : ''
+                    } else {
+                        bot.sendMessage(chatId, "您没有权限结束定时任务")
+                    }
                     break
                 case "创建广告":
                     updateBack.CreateAse(bot, chatId)
@@ -82,6 +84,9 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg, config,
 
                 case "/admin_reset": //管理员删除所有用户广告数据
                     updateBack.adminReset(bot, chatId, redis)
+                    break
+                case "我的id":
+                    bot.sendMessage(chatId, `您的ID是:${chatId}`)
                     break
                 case "返回":
                     updateBack.callbackhom(bot, chatId)

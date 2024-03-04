@@ -1,13 +1,17 @@
 const schedule = require('node-schedule');
 let Intverval = null
+const { getfileTxt } = require('./utils')
 
 //定时发送消息   群内用
-async function SendRegularly(bot, msg, config,congent) {
-
-    console.log(config,'定时发送时间1');
+async function SendRegularly(bot, msg, config) {
     const chatId = msg.chat.id;
+    const content =  getfileTxt(chatId,config)
     let DQnow = getNowData()
     console.log(DQnow); //查看当前时间
+    if(content==="找不到内容"){
+        bot.sendMessage(chatId, "找不到内容")
+        return
+    }
     if (config.sendtype == 1) {
         // 指定时间发送
         config.sendtimes.map(item => {
@@ -21,7 +25,7 @@ async function SendRegularly(bot, msg, config,congent) {
                     })
                 } else {
 
-                    bot.sendMessage(chatId, congent, {
+                    bot.sendMessage(chatId, content, {
                         reply_markup: {
                             resize_keyboard: true,
                             one_time_keyboard: true,
@@ -44,7 +48,7 @@ async function SendRegularly(bot, msg, config,congent) {
                     }
                 })
             } else {
-                bot.sendMessage(chatId, congent, {
+                bot.sendMessage(chatId, content, {
                     reply_markup: {
                         resize_keyboard: true,
                         one_time_keyboard: true,

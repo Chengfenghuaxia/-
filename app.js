@@ -6,23 +6,22 @@ const messageModule = require('./message')
 const inline_query = require('./inline_query')
 const callback_query = require('./callback_query')
 const SendReg = require('./SendRegularly')
-const { getfileTxt } = require('./utils')
 redis = new Redis();
-const bot = new TelegramBot('6445269699:AAGHNcyWNl-wfDM0IdmWbaX7yVmiil4BWGs', { polling: true });
-let MyAdvertise = utils.getMyAdvertise(redis,State.chatId) //我的广告  只要服务已开启输入ID就能转发广告
 let configs = utils.readConfig()
-let content =  getfileTxt()
+const bot = new TelegramBot(configs.token, { polling: true });
+let MyAdvertise = utils.getMyAdvertise(redis,State.chatId) //我的广告  只要服务已开启输入ID就能转发广告
+
 
 
 // 定时读取配置文件
 setInterval(async () => {
-    content =  getfileTxt()
+    // content =  getfileTxt()
     configs = utils.readConfig()
 }, 5000);
 
 //监听用户消息回调
 bot.on('message', async (msg) => {
-    messageModule(bot, msg, redis, utils, State, SendReg,configs,content)
+    messageModule(bot, msg, redis, utils, State, SendReg,configs)
 })
 
 // 监听内联查询事件

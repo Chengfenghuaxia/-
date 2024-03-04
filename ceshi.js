@@ -1,25 +1,22 @@
 const fs = require('fs');
-// const iniParser = require('ini-parser');
+const path = require('path');
+
+// 要列出文件的目录路径
+const directoryPath = '/path/to/directory';
+
+// 使用 fs.readdir 方法读取目录中的文件列表
+fs.readdir("./config/advertise", (err, files) => {
+    if (err) {
+        console.error('无法读取目录内容：', err);
+        return;
+    }
+
+    // 输出文件列表
+    console.log('目录中的文件列表：');
+    files.forEach(file => {
+        console.log(file);
+    });
+});
 
 
-// // 读取 INI 文件
-// const configData = fs.readFileSync('./config/config.ini', 'utf-8');
-
-// const parsedData = iniParser.parse(configData);
-
-// console.log(parsedData);
-
-// // 处理模拟数组
-// const arrayPrefix = 'fruit'; // 假设键名前缀为 'fruit'
-// const fruitArray = [];
-// let i = 0;
-// while (parsedData[arrayPrefix + i]) {
-//     fruitArray.push(parsedData[arrayPrefix + i]);
-//     i++;
-// }
-
-// console.log(fruitArray); // 输出模拟的数组
-
-const config = fs.readFileSync('./config/config.json');
-console.log(JSON.parse(data)  );
-
+// 消息首行带上群号
