@@ -8,7 +8,7 @@ async function SendRegularly(bot, msg, config) {
     const content =  getfileTxt(chatId,config)
     let DQnow = getNowData()
     console.log(DQnow); //查看当前时间
-    if(content==="找不到内容"){
+    if(config.sendtype == 1&&content==="找不到内容"){
         bot.sendMessage(chatId, "找不到内容")
         return
     }
@@ -18,7 +18,7 @@ async function SendRegularly(bot, msg, config) {
             Intverval = schedule.scheduleJob({ hour: item.hour, minute: item.minute }, function () {
                 // 发送消息
                 if (config.type == 1) {
-                    bot.sendPhoto(chatId, config.mediaUrl, {
+                    bot.sendPhoto(chatId, config.mediaUrl[chatId], {
                         reply_markup: {
                             inline_keyboard: config.button
                         }
@@ -38,11 +38,13 @@ async function SendRegularly(bot, msg, config) {
 
         })
     } else {
+        console.log(config.mediaUrl[chatId],chatId,"图片地址");
+
         // 间隔N分钟发送一次
         Intverval = schedule.scheduleJob(config.interval, function () {
             // 发送消息
             if (config.type == 1) {
-                bot.sendPhoto(chatId, config.mediaUrl, {
+                bot.sendPhoto(chatId, config.mediaUrl[chatId], {
                     reply_markup: {
                         inline_keyboard: config.button
                     }

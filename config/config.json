@@ -12,10 +12,14 @@
             "minute": 57
         }
     ],
-    "interval": "*/10 * * * * *",
+    "interval": "*/5 * * * * *",
     "sendtype": 2,
-    "type": 2,
-    "mediaUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
+    "type": 1,
+    "mediaUrl": {
+        "-4126577286": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
+        "-4144254793": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
+        "-4132815182": "./config/01.jpg"
+    },
     "button": [
         [
             {
@@ -29,10 +33,8 @@
         7026478261
     ],
     "GroupList": {
-        "-4126577286":"1",
-        "-4132815182":"2",
-        "-4144254793":"3"
+        "-4126577286": "1",
+        "-4132815182": "2",
+        "-4144254793": "3"
     }
-   
-    
 }
