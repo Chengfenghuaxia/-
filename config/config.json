@@ -1,0 +1,26 @@
+{
+    "startSending":"start",
+    "endSending":"endset",
+    "sendtimes": [
+        {
+            "hour": 15,
+            "minute": 14
+        }, {
+            "hour": 21,
+            "minute": 57
+        }
+    ],
+    "interval":"*/1 * * * * *",
+    "sendtype":1,
+    "type": 1, 
+    "mediaUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRY24IR8MKyO5H9MHVRX4zi6c_fa3umNmJMobEd7--oA&s",
+    "button":[
+        [
+            {
+                "text": "分享1",
+                "url": "https://t.me/HeartTetrisbot" 
+            }
+        ]
+    ],
+    "Permiss":["用户chatid"]
+}

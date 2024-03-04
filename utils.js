@@ -65,17 +65,11 @@ async function setAsdtitle(bot, State, messageText, redis, chatId) {
 }
 //读取广告信息
 function getfileTxt() {
-    return new Promise((resolve, reject) => {
-        fs.readFile("./config/msg.txt", 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading file:', err);
-                reject(err)
-                return;
-            }
-            resolve(data)
-           
-        });
-    })
+    return fs.readFileSync("./config/msg.txt", 'utf8');
+}
+
+function readConfig() {
+    return JSON.parse(fs.readFileSync('./config/config.json', 'utf8'));
 }
 module.exports = {
     isUrl,
@@ -86,5 +80,6 @@ module.exports = {
     isEmpty,
     getAllvertise,
     setAsdtitle,
-    getfileTxt
+    getfileTxt,
+    readConfig
 }
