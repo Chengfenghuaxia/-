@@ -38,8 +38,6 @@ async function SendRegularly(bot, msg, config) {
 
         })
     } else {
-        console.log(config.mediaUrl[chatId],chatId,"图片地址");
-
         // 间隔N分钟发送一次
         Intverval = schedule.scheduleJob(config.interval, function () {
             // 发送消息
@@ -63,9 +61,6 @@ async function SendRegularly(bot, msg, config) {
     }
     return Intverval
 }
-
-
-
 
 function getNowData() {
 
