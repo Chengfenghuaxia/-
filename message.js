@@ -1,6 +1,6 @@
 const updateBack = require('./messageTask/updates')
 const fmtButton = require('./messageTask/format_button')
-module.exports = async function (bot, msg, redis, utils, State, SendReg,config,congent) {
+module.exports = async function (bot, msg, redis, utils, State, SendReg, config, congent) {
     const button = [['我的广告', '创建广告']]; //初试内联按钮
     text = ""
     const chatId = msg.chat.id;
@@ -46,8 +46,14 @@ module.exports = async function (bot, msg, redis, utils, State, SendReg,config,c
         res.map(async val => {
             switch (val.message.text) {
                 case config.startSending: //开启定时任务 发送广告
-                console.log(config,"是否读取到信息");
-                    State.Intverval = SendReg.SendRegularly(bot, msg,config,congent)
+                    let isPermiss = config.Permiss.some(item => {
+                        return item == chatId
+                    })
+                    if (isPermiss) {
+                        State.Intverval = SendReg.SendRegularly(bot, msg, config, congent)
+                    } else {
+                        bot.sendMessage(chatId, "您没有权限开启定时任务")
+                    }
                     break
                 case config.endSending: //结束定时任务
                     let res = await State.Intverval
